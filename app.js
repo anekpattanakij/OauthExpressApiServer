@@ -1,20 +1,16 @@
-// Use Babel translate ECMAScript 2015 และ JSX
-//require('babel-register');
-
-// for start้ start server
-//require('./app/server.js');
-
-
-var restify = require('restify');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var flash = require('connect-flash');
-var config = require('config');
-var cluster = require('cluster');
-var http = require('http');
-var redis = require('redis');
-var oauthserver = require('oauth2-server');
+import  express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser'
+import session from 'express-session';
+import flash from 'connect-flash';
+import config from 'config';
+import cluster from 'cluster';
+import http from 'http';
+import redis from 'redis';
+import oauthserver from 'oauth2-server';
+import connectRedis from 'connect-redis';
+var redisStore = connectRedis(session);
 
 //If node_env doesn't set -> defeult as development
 if(!process.env.NODE_ENV)
@@ -35,17 +31,21 @@ if (cluster.isMaster) {
 
 // Code to run if we're in a worker process
 } else {
-  var app = restify.createServer();
-  app.use(restify.acceptParser(app.acceptable));
-  app.use(restify.dateParser());
-  app.use(restify.queryParser());
-  app.use(restify.jsonp());
-  app.use(restify.gzipResponse());
-  app.use(restify.bodyParser());
-  
+  var app = express();
+
+  app.use(flash());
+  var redisClient  = redis.createClient();
+  app.use(session({
+    secret: 'adsSortSessionKey',
+    // create new redis store.
+    store: new redisStore({ host: config.get("REDIS_HOST"), port: config.get("REDIS_PORT"), client: redisClient,ttl :  6000, cookie:{maxAge:6000}}),
+    saveUninitialized: false,
+    resave: true
+  }));
+
   //Set OAuthServer
   // Add body parser.
-  app.use(restify.bodyParser());
+  app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.oauth = oauthserver({
     model: require('./app/lib/oauthModel'),
@@ -84,10 +84,8 @@ if (cluster.isMaster) {
   */
 
   // error handlers
-  //require('./app/lib/errorHandler')(app);
+  require('./app/lib/errorHandler')(app);
 
   console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV + " cpu : " + + cluster.worker.id);
-  app.listen(config.get("HTTPPORT"), function() {
-    console.log('listening: %s', config.get("HTTPPORT"));
-    });
+  http.createServer(app).listen(config.get("HTTPPORT"));
 }

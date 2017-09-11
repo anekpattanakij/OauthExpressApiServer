@@ -2,7 +2,6 @@ var RoleDb    = require('./dbConnector/roleDb');
 var CompanyDb    = require('./dbConnector/companyDb');
 var MasterRoleDb    = require('./dbConnector/masterRoleDb');
 var Company    = require('./company');
-var Promise    = require('bluebird');
 
 const  ADMIN_ROLE_ID = 1;
 const  MARKETING_ROLE_ID = 2;

@@ -1,7 +1,6 @@
 var User    = require('./user');
 var Role    = require('./role');
 var Company    = require('./company');
-var Promise = require('promise');
 var UserDb    = require('./dbConnector/userDb');
 
 function UserProfile() {

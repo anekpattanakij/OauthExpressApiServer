@@ -2,7 +2,6 @@ var User = require('./../model/user');
 var UserProfile = require('./../model/userProfile');
 var Role    = require('./../model/role');
 var Company    = require('./../model/company');
-var Promise = require('promise');
 
 module.exports = {
 

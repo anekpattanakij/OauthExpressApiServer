@@ -2,11 +2,11 @@
  * Module dependencies.
  */
 
-var redis = require('redis');
-var config = require('config');
-var db = redis.createClient(config.get("REDIS_PORT"),config.get("REDIS_HOST"));
-var fmt = require('util').format;
-var Promise = require('bluebird');
+import redis from 'redis';
+import config from 'config';
+import fmt from 'util';
+const db = redis.createClient(config.get("REDIS_PORT"),config.get("REDIS_HOST"));
+
 /**
  * Redis formats.
  */

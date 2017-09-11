@@ -1,7 +1,6 @@
 var User = require('./../model/user');
 var invitationUser = require('./../model/InvitationUser');
 var oauthModel = require('./../lib/oauthModel');
-var Promise = require('bluebird');
 const uuid = require('node-uuid');
 
 module.exports = {
