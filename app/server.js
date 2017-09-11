@@ -6,7 +6,6 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import config from 'config';
 import cluster from 'cluster';
-import mailgun from 'mailgun-js';
 import http from 'http';
 import redis from 'redis';
 import oauthserver from 'oauth2-server';
