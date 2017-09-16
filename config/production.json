@@ -1,6 +1,6 @@
 {
-  "WEB_HOST" : "http://www.adssort.com",
-  "API_HOST" : "http://api.adssort.com",
+  "WEB_HOST" : "http://www.fictionio.com",
+  "API_HOST" : "http://api.fictionio.com",
   "HTTPPORT" : 4000,
   "FACEBOOK_CLIENTID": "ID",
   "FACEBOOK_SECRET": "SECRET",
@@ -12,15 +12,12 @@
   "LINKEDIN_SECRET": "SECRET",
   "GOOGLE_CLIENTID": "ID",
   "GOOGLE_SECRET": "SECRET",
-  "MYSQL_USER" : "root",
-  "MYSQL_PASSWORD" : "password",
-  "MYSQL_HOST" : "localhost",
-  "MYSQL_DATABASE" : "ADSSORT",
+  "MONGO_USER" : "root",
+  "MONGO_PASSWORD" : "password",
+  "MONGO_HOST" : "localhost",
+  "MONGO_DATABASE" : "ADSSORT",
   "EMAIL_SENDING" : true,
-  "MAILGUN_API_BASE_URL" : "https://api.mailgun.net/v3/www.adssort.com",
-  "MAILGUN_API_KEY" : "",
   "REDIS_HOST" : "127.0.0.1",
   "REDIS_PORT" : "6379",
-  "STATIC_CONTENT_URL" : "http://localhost:3000",
-  "USER_STATIC_CONTENT_URL" : "http://localhost:3000"
+  "STATIC_CONTENT_URL" : "http://localhost:3000"
 }

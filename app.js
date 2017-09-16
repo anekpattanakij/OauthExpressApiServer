@@ -71,8 +71,7 @@ if (cluster.isMaster) {
       }
   });
 
-  // Bootstrap passport config
-  require('./routes/apiRoute')(app);
+  //require('./routes/apiRoute')(app);
 
   /* In case, have many route in the future, we will use this code
   var fs = require ('fs');

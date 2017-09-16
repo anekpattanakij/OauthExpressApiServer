@@ -4,7 +4,7 @@
 
 import redis from 'redis';
 import config from 'config';
-import fmt from 'util';
+import {format} from 'util';
 const db = redis.createClient(config.get("REDIS_PORT"),config.get("REDIS_HOST"));
 
 /**
@@ -23,7 +23,7 @@ var formats = {
 
 module.exports.getAccessToken = function(bearerToken,callback) {
   console.log(bearerToken);
-  return db.get(fmt(formats.token, bearerToken), function(err,token) {
+  return db.get(format(formats.token, bearerToken), function(err,token) {
       if (!token) {
         return callback(err);
       }
@@ -60,7 +60,7 @@ module.exports.getClient = function(clientId, clientSecret,callback) {
  */
 
 module.exports.getRefreshToken = function(bearerToken,callback) {
-  return db.get(fmt(formats.token, bearerToken), function(err,token) {
+  return db.get(format(formats.token, bearerToken), function(err,token) {
     if (!token) {
       return callback(err);
     }
@@ -88,7 +88,7 @@ module.exports.saveAccessToken = function(token, client, expires, user,callback)
     clientId: client,
     user: user
   };
-  db.set(fmt(formats.token, token), JSON.stringify(data));
+  db.set(format(formats.token, token), JSON.stringify(data));
   return callback(null);
 };
 
@@ -99,7 +99,7 @@ module.exports.saveRefreshToken = function(token, client, expires, user,callback
     expires: expires,
     user: user
   };
-  db.set(fmt(formats.token, token), JSON.stringify(data));
+  db.set(format(formats.token, token), JSON.stringify(data));
   return callback(null);
 };
 
@@ -110,13 +110,13 @@ module.exports.grantTypeAllowed = function(clientId, grantType,callback) {
 //For Revoke Token After Logout
 module.exports.revokeRefreshToken = function(token, callback)
 {
-  db.del(fmt(formats.token, token));
+  db.del(format(formats.token, token));
   return callback(null); //always allow
 };
 
 //For Revoke Token After Logout
 module.exports.revokeAccessToken = function(token, callback)
 {
-  db.del(fmt(formats.token, token));
+  db.del(format(formats.token, token));
   return callback(null); //always allow
 };
