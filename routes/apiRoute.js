@@ -53,45 +53,7 @@ module.exports = function (app) {
   app.all('/findByCompanyId',app.oauth.authorise() , transfromDataMiddleware,apiCompanyController.findByCompanyId );
 
   //app.put('/registerInivteNewUserToCompany' ,apiCompanyController.registerInivteNewUserToCompany );
-
-  app.post('/listDomainByCompanyId',app.oauth.authorise() , transfromDataMiddleware,apiDomainController.listDomainByCompanyId );
-
-  app.post('/addDomainToCompany',app.oauth.authorise() , transfromDataMiddleware,apiDomainController.addDomainToCompany );
-
-  app.post('/updateDomainStatus',app.oauth.authorise() , transfromDataMiddleware,apiDomainController.updateDomainStatus );
-
-  app.post('/removeCompanyDomain',app.oauth.authorise() , transfromDataMiddleware,apiDomainController.removeCompanyDomain );
-
-  app.post('/getCompanyDomainDetail',app.oauth.authorise() , transfromDataMiddleware,apiDomainController.getCompanyDomainDetail );
-
-  app.post('/refreshDomainStatus',app.oauth.authorise() , transfromDataMiddleware,apiDomainController.refreshDomainStatus );
-
-  app.post('/listCountry',apiCountryController.listCountry );
-
-  app.post('/findCountryByCountryCode',apiCountryController.findByCountryCode );
-
-  app.post('/listIndustry',apiIndustryController.listIndustry );
-
-  app.post('/listTimeZone',apiTimeZoneController.listTimeZone );
-
-  app.post('/listRole',apiRoleController.list );
-
-  app.post('/findRoleByCif',apiRoleController.findByCif );
-
-  app.post('/saveRoleByCif', app.oauth.authorise() , transfromDataMiddleware,apiRoleController.saveRoleByCif );
-
-  app.post('/inviteUserToCompany', app.oauth.authorise() , transfromDataMiddleware,apiUserController.inviteUserToCompany );
-
-  app.post('/checkInviteKey',apiUserController.checkInviteKey );
-
-  app.post('/listInvitationByEmailAndCompany', app.oauth.authorise() , transfromDataMiddleware,apiUserController.listInvitationByEmailAndCompany );
-
-  app.post('/acceptUserInvite',apiUserController.acceptUserInvite );
-
-  app.post('/insertForgetPasswordKey',apiUserController.insertForgetPasswordKey );
-
-  app.post('/checkForgetPasswordKey',apiUserController.checkForgetPasswordKey );
-
+  
   app.post('/removeForgetPasswordKey', app.oauth.authorise() , transfromDataMiddleware,apiUserController.removeForgetPasswordKey );
 
 }

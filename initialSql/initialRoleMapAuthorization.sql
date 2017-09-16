@@ -1,4 +1,0 @@
-INSERT INTO adssort.role_map_authorization (ROLE_ID,AUTHORIZATION_LIST) VALUES (1,'11111111');
-INSERT INTO adssort.role_map_authorization (ROLE_ID,AUTHORIZATION_LIST) VALUES (2,'11111111');
-INSERT INTO adssort.role_map_authorization (ROLE_ID,AUTHORIZATION_LIST) VALUES (3,'11111111');
-INSERT INTO adssort.role_map_authorization (ROLE_ID,AUTHORIZATION_LIST) VALUES (4,'11111111');
