@@ -21,10 +21,10 @@ module.exports = {
         dynamodb.createTable(params, function (err, data) {
             if (err) {
                 console.error("Unable to create table. Error JSON:", JSON.stringify(err, null, 2));
-                reject('database created');
+                reject('database not new created this time');
             } else {
                 console.log("Created table. Table description JSON:", JSON.stringify(data, null, 2));
-                resolve('database created');
+                resolve('new database created');
             }
         });
     })

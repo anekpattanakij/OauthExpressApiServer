@@ -21,6 +21,13 @@ aws.config.update({
 });
 var dynamodb = new aws.DynamoDB();
 
+createDatabase.createDatabase(dynamodb).then((success) => {
+  console.error('create table success');
+}
+).catch((error) => {
+  console.error(error);
+})
+
 //If node_env doesn't set -> defeult as development
 if (!process.env.NODE_ENV) {
   console.log('NODE_ENV not found, default as development');
@@ -91,15 +98,7 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'development') {
 
   // error handlers
   require('./app/lib/errorHandler')(app);
-
-  createDatabase.createDatabase(dynamodb).then((success) => {
-    // console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV + " cpu : " + cluster.worker.id);
-    console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV);
-    http.createServer(app).listen(config.get("HTTPPORT"));
-  }
-  ).catch((error) => {
-    console.error(error.message);
-    console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV);
-    http.createServer(app).listen(config.get("HTTPPORT"));
-  })
+  // console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV + " cpu : " + cluster.worker.id);
+  console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV);
+  http.createServer(app).listen(config.get("HTTPPORT"));
 }
