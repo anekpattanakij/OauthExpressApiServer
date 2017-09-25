@@ -17,7 +17,7 @@
   "MONGO_HOST" : "localhost",
   "MONGO_DATABASE" : "ADSSORT",
   "EMAIL_SENDING" : true,
-  "REDIS_HOST" : "127.0.0.1",
+  "REDIS_HOST" : "192.168.99.100",
   "REDIS_PORT" : "6379",
-  "STATIC_CONTENT_URL" : "http://localhost:3000"
+  "DYNAMODB_HOST" : "192.168.99.100"
 }

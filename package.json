@@ -15,7 +15,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/anekpattanakij/adssort-api#readme",
   "dependencies": {
-    "aws-sdk": "^2.2.37",
+    "aws-sdk": "^2.122.0",
     "bcryptjs": "^2.3.0",
     "body-parser": "~1.14.1",
     "cluster": "^0.7.7",

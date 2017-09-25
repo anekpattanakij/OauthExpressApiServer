@@ -10,7 +10,11 @@ import http from 'http';
 import redis from 'redis';
 import oauthserver from 'oauth2-server';
 import connectRedis from 'connect-redis';
+import aws from 'aws-sdk';
 var redisStore = connectRedis(session);
+aws.config.update({
+  endpoint: config.get("DYNAMODB_HOST")
+});
 
 //If node_env doesn't set -> defeult as development
 if(!process.env.NODE_ENV)
@@ -19,7 +23,7 @@ if(!process.env.NODE_ENV)
   process.env.NODE_ENV = 'development';
 }
 // Code to run if we're in the master process
-if (cluster.isMaster) {
+if (cluster.isMaster && process.env.NODE_ENV !== 'development') {
 
     // Count the machine's CPUs
     var cpuCount = require('os').cpus().length;
@@ -85,6 +89,8 @@ if (cluster.isMaster) {
   // error handlers
   require('./app/lib/errorHandler')(app);
 
-  console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV + " cpu : " + + cluster.worker.id);
+
+  // console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV + " cpu : " + cluster.worker.id);
+  console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV);
   http.createServer(app).listen(config.get("HTTPPORT"));
 }
