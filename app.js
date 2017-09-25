@@ -1,4 +1,4 @@
-import  express from 'express';
+import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser'
@@ -11,38 +11,42 @@ import redis from 'redis';
 import oauthserver from 'oauth2-server';
 import connectRedis from 'connect-redis';
 import aws from 'aws-sdk';
+import createDatabase from './initialDatabase/createDatabase';
 var redisStore = connectRedis(session);
+
 aws.config.update({
-  endpoint: config.get("DYNAMODB_HOST")
+  region: "us-east-1",
+  endpoint: config.get("DYNAMODB_HOST"),
+  sslEnabled: false
 });
+var dynamodb = new aws.DynamoDB();
 
 //If node_env doesn't set -> defeult as development
-if(!process.env.NODE_ENV)
-{
+if (!process.env.NODE_ENV) {
   console.log('NODE_ENV not found, default as development');
   process.env.NODE_ENV = 'development';
 }
 // Code to run if we're in the master process
 if (cluster.isMaster && process.env.NODE_ENV !== 'development') {
 
-    // Count the machine's CPUs
-    var cpuCount = require('os').cpus().length;
+  // Count the machine's CPUs
+  var cpuCount = require('os').cpus().length;
 
-    // Create a worker for each CPU
-    for (var i = 0; i < cpuCount; i += 1) {
-        cluster.fork();
-    }
+  // Create a worker for each CPU
+  for (var i = 0; i < cpuCount; i += 1) {
+    cluster.fork();
+  }
 
-// Code to run if we're in a worker process
+  // Code to run if we're in a worker process
 } else {
   var app = express();
 
   app.use(flash());
-  var redisClient  = redis.createClient();
+  var redisClient = redis.createClient();
   app.use(session({
     secret: 'adsSortSessionKey',
     // create new redis store.
-    store: new redisStore({ host: config.get("REDIS_HOST"), port: config.get("REDIS_PORT"), client: redisClient,ttl :  6000, cookie:{maxAge:6000}}),
+    store: new redisStore({ host: config.get("REDIS_HOST"), port: config.get("REDIS_PORT"), client: redisClient, ttl: 6000, cookie: { maxAge: 6000 } }),
     saveUninitialized: false,
     resave: true
   }));
@@ -53,8 +57,8 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'development') {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.oauth = oauthserver({
     model: require('./app/lib/oauthModel'),
-    grants: ['password','refresh_token'],
-    accessTokenLifetime:3600,
+    grants: ['password', 'refresh_token'],
+    accessTokenLifetime: 3600,
     refreshTokenLifetime: 1209600,
     debug: true
   });
@@ -62,17 +66,16 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'development') {
 
   app.use(cookieParser());
   // for calling x-site from web tier
-  app.use(function(req, res, next) {
-      res.header('Access-Control-Allow-Origin', config.get('WEB_HOST'));
-      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-      if ('OPTIONS' == req.method)
-      {
-        res.sendStatus(200);
-      }
-      else {
-        next();
-      }
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', config.get('WEB_HOST'));
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    if ('OPTIONS' == req.method) {
+      res.sendStatus(200);
+    }
+    else {
+      next();
+    }
   });
 
   //require('./routes/apiRoute')(app);
@@ -89,8 +92,14 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'development') {
   // error handlers
   require('./app/lib/errorHandler')(app);
 
-
-  // console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV + " cpu : " + cluster.worker.id);
-  console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV);
-  http.createServer(app).listen(config.get("HTTPPORT"));
+  createDatabase.createDatabase(dynamodb).then((success) => {
+    // console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV + " cpu : " + cluster.worker.id);
+    console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV);
+    http.createServer(app).listen(config.get("HTTPPORT"));
+  }
+  ).catch((error) => {
+    console.error(error.message);
+    console.log("Start API Server @ port " + config.get("HTTPPORT") + " with " + process.env.NODE_ENV);
+    http.createServer(app).listen(config.get("HTTPPORT"));
+  })
 }
